@@ -1,0 +1,6 @@
+This is sender
+This is 2345678987654№;%:?*(*?:%;) Sender
+Strange  topic  with spaces
+And finally, content, this is it;'~`
+    Here it is
+END

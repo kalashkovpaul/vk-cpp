@@ -2,6 +2,8 @@
 
 #define LETTER_H_
 
+#include "stdio.h"
+
 #include "constants.h"
 
 #define CONTENT_TERMINATION_SEQUENSE "END"

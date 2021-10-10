@@ -4,6 +4,7 @@
 
 int main(void)
 {
+    printf("Домашнее задание 1\n");
     int check = OK;
     letter mail = { 0 };
     check = getLetterFromUser(&mail);

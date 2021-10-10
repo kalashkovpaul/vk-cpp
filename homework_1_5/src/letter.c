@@ -5,7 +5,7 @@
 #include "letter.h"
 #include "constants.h"
 
-int fileReadLine(FILE *src, char **str)
+static int fileReadLine(FILE *src, char **str)
 {
     int check = OK;
     int allocatedLength = 2;
@@ -31,7 +31,9 @@ int fileReadLine(FILE *src, char **str)
             if (check == OK)
                 (*str)[i++] = ch;
         }
-        if (check == OK)
+        if (ch != '\n')
+            check = ERR_WITHOUT_END;
+        else if (check == OK)
             (*str)[i - 1] = 0;
     }
     else
@@ -39,7 +41,7 @@ int fileReadLine(FILE *src, char **str)
     return check;
 }
 
-int concatenateLines(char **beginning, char *end)
+static int concatenateLines(char **beginning, char *end)
 {
     int check = OK;
     int beginningLength = strlen(*beginning);
@@ -59,18 +61,25 @@ int concatenateLines(char **beginning, char *end)
     return check;
 }
 
-int isItTimeToTerminate(char *str)
+static int isItTimeToTerminate(char *str)
 {
     return (strncmp(str, CONTENT_TERMINATION_SEQUENSE, CONTENT_TERMINATION_SEQUENSE_LENGTH) == 0 \
      && str[CONTENT_TERMINATION_SEQUENSE_LENGTH] == 0);
 }
 
-int fileGetContent(FILE *src, char **content)
+static int fileGetContent(FILE *src, char **content)
 {
     char *line_of_content = NULL;
     int check = OK;
     check = fileReadLine(src, content);
-    if (check == OK && !isItTimeToTerminate(*content))
+    if (check == OK && isItTimeToTerminate(*content))
+    {
+        free(*content);
+        char *tmp = malloc(sizeof(char));
+        *content = tmp;
+        **content = '\0';
+    }
+    else if (check == OK && !isItTimeToTerminate(*content))
     {
         check = fileReadLine(src, &line_of_content);
         while (check == OK && !isItTimeToTerminate(line_of_content))
@@ -149,7 +158,6 @@ void freeLetter(letter *currentLetter)
 int isSpam(letter currentLetter)
 {
     return (strstr(currentLetter.sender, SPAM_TRIGGER) != NULL || \
-    strstr(currentLetter.recipient, SPAM_TRIGGER) != NULL || \
     strstr(currentLetter.topic, SPAM_TRIGGER) != NULL || \
     strstr(currentLetter.content, SPAM_TRIGGER) != NULL);
 }
