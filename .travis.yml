@@ -26,4 +26,8 @@ script:
     - cmake ..
     - make
     - ./letterTest
-    
+    - ctest --output-on-failure
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=yes ctest; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --tool=memcheck --leak-check=yes ./task1.out grass 1; fi
+    - cd ..
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck --error-exitcode=1 -I project/include ./project/tst ./project/src ./project/include/*.h; fi
