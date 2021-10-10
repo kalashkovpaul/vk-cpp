@@ -30,7 +30,7 @@ add_library(letter STATIC ${LIB_SOURCE_FILES} ${LIB_HEADERS_FILES})
 include_directories(${PROJECT_SOURCE_DIR}/inc)
 add_executable(app src/main.c)
 target_link_libraries(app letter)
-target_link_libraries(program gcov)
+target_link_libraries(app gcov)
 
 enable_testing()
 find_package(GTest REQUIRED)
