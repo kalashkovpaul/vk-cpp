@@ -30,7 +30,7 @@ matrix:
 
 
 install:
-    - source ci/travis/install-$TRAVIS_OS_NAME.sh
+    - source ci/install-$TRAVIS_OS_NAME.sh
 
 
 script:
@@ -39,3 +39,4 @@ script:
     - cd build
     - cmake ..
     - make
+    - ./letterTest
