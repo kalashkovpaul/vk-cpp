@@ -6,14 +6,19 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CXX g++)
 
-include(FetchContent)
-FetchContent_Declare(
-        gtest
-        # Specify the commit you depend on and update it regularly.
-        URL https://github.com/google/googletest/archive/release-1.11.0.tar.gz
+project(googletest-download NONE)
+
+include(ExternalProject)
+ExternalProject_Add(googletest
+  GIT_REPOSITORY    https://github.com/google/googletest.git
+  GIT_TAG           release-1.8.1
+  SOURCE_DIR        "${CMAKE_BINARY_DIR}/googletest-src"
+  BINARY_DIR        "${CMAKE_BINARY_DIR}/googletest-build"
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND     ""
+  INSTALL_COMMAND   ""
+  TEST_COMMAND      ""
 )
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(gtest)
 
 set(LIB_SOURCE_FILES src/letter.c)
 set(LIB_HEADERS_FILES inc/letter.h inc/constants.h)

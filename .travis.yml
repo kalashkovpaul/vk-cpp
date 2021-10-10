@@ -1,37 +1,22 @@
 dist:     trusty
 sudo:     required
 
-language: cpp
+language: c
 
 os:
     - linux
-    - osx
 
 compiler:
     - gcc
-    - clang
 
-env:
-    - TARGET_CPU=amd64 BUILD_CONFIGURATION=Debug
-    - TARGET_CPU=amd64 BUILD_CONFIGURATION=Release
-    - TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
-    - TARGET_CPU=x86 BUILD_CONFIGURATION=Release
-
-matrix:
-    exclude:
-        - os:       osx
-          compiler: gcc
-
-        - os:  osx
-          env: TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
-
-        - os:  osx
-          env: TARGET_CPU=x86 BUILD_CONFIGURATION=Release
-
-
-install:
-    - source ci/install-$TRAVIS_OS_NAME.sh
-
+addons:
+  apt:
+    packages:
+      -Icov
+      -valgrind
+      -cppcheck
+      -make
+      -cmake
 
 script:
     # скрипт сборки и тестирования проекта:
@@ -41,3 +26,4 @@ script:
     - cmake ..
     - make
     - ./letterTest
+    
