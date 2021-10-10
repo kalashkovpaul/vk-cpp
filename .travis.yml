@@ -12,7 +12,6 @@ compiler:
 addons:
   apt:
     packages:
-      -gcovr
       -valgrind
       -cppcheck
       -make
