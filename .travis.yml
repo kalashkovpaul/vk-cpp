@@ -12,10 +12,11 @@ compiler:
 addons:
   apt:
     packages:
-      -valgrind
-      -cppcheck
-      -make
-      -cmake
+      - lcov
+      - valgrind
+      - cppcheck
+      - make
+      - cmake
 
 script:
     # скрипт сборки и тестирования проекта:
