@@ -12,7 +12,7 @@ compiler:
 addons:
   apt:
     packages:
-      -Icov
+      -gcov
       -valgrind
       -cppcheck
       -make
