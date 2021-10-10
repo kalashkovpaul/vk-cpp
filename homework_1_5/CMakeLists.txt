@@ -9,13 +9,13 @@ set(LIB_SOURCE_FILES src/letter.c)
 set(LIB_HEADERS_FILES inc/letter.h inc/constants.h)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic -Wfloat-conversion -Wvla -Iinc -Wfloat-equal -pthread -Wpedantic -Wextra")
 
+add_compile_options("--coverage")
+add_link_options("--coverage")
+
 add_library(letter STATIC ${LIB_SOURCE_FILES} ${LIB_HEADERS_FILES})
 include_directories(${PROJECT_SOURCE_DIR}/inc)
 add_executable(app src/main.c)
 target_link_libraries(app letter)
-
-add_compile_options("--coverage")
-add_link_options("--coverage")
 
 enable_testing()
 find_package(GTest REQUIRED)
