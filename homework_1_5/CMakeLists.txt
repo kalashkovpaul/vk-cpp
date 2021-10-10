@@ -4,7 +4,16 @@ enable_language(C)
 enable_language(CXX)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_COMPILER g++)
+set(CXX g++)
+
+include(FetchContent)
+FetchContent_Declare(
+        gtest
+        # Specify the commit you depend on and update it regularly.
+        URL https://github.com/google/googletest/archive/release-1.11.0.tar.gz
+)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(gtest)
 
 set(LIB_SOURCE_FILES src/letter.c)
 set(LIB_HEADERS_FILES inc/letter.h inc/constants.h)
