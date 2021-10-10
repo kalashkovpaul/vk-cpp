@@ -35,6 +35,7 @@ install:
 
 script:
     # скрипт сборки и тестирования проекта:
+    - cd homework_1_5
     - mkdir build
     - cd build
     - cmake ..
