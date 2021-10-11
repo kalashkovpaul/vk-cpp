@@ -24,7 +24,7 @@ set(CXX g++)
 
 set(LIB_SOURCE_FILES src/letter.c)
 set(LIB_HEADERS_FILES inc/letter.h inc/constants.h)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic -Wfloat-conversion -Wvla -Iinc -Wfloat-equal -pthread -Wpedantic -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic -Wvla -Iinc -Wfloat-equal -pthread -Wpedantic -Wextra")
 
 add_compile_options("--coverage")
 
