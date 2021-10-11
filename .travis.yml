@@ -20,6 +20,8 @@ addons:
 
 script:
     # скрипт сборки и тестирования проекта:
+    - sudo apt update
+    - sudo apt install googletest
     - sudo apt-get install libgtest-dev
     - sudo apt install cmake
     - cd homework_1_5
