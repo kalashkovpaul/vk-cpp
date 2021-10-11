@@ -9,7 +9,7 @@ extern "C"
 
 TEST(getLetterFromFile, emptyLetter)
 {
-    letter mail = {};
+    letter mail = { NULL, NULL, NULL, NULL };
     int check = 0;
     FILE *src = fopen("../unit_tests/emptyLetter.txt", "r");
     check = getLetterFromFile(src, &mail); 
@@ -24,7 +24,7 @@ TEST(getLetterFromFile, emptyLetter)
 
 TEST(getLetterFromFile, emptyFile)
 {
-    letter mail = {};
+    letter mail = { NULL, NULL, NULL, NULL };
     int check = 0;
     FILE *src = fopen("../unit_tests/emptyLetter.txt", "r");
     check = getLetterFromFile(src, &mail); 
@@ -40,7 +40,7 @@ TEST(getLetterFromFile, emptyFile)
 
 TEST(getLetterFromFile, letterWithoutEnd)
 {
-    letter mail = {};
+    letter mail = { NULL, NULL, NULL, NULL };
     int check = 0;
     FILE *src = fopen("../unit_tests/letterWithoutEnd.txt", "r");
     check = getLetterFromFile(src, &mail); 
@@ -55,7 +55,7 @@ TEST(getLetterFromFile, letterWithoutEnd)
 
 TEST(getLetterFromFile, oneStringContent)
 {
-    letter mail = {};
+    letter mail = { NULL, NULL, NULL, NULL };
     int check = 0;
     FILE *src = fopen("../unit_tests/oneStringContent.txt", "r");
     check = getLetterFromFile(src, &mail); 
@@ -70,7 +70,7 @@ TEST(getLetterFromFile, oneStringContent)
 
 TEST(getLetterFromFile, complexContentLetter)
 {
-    letter mail = {};
+    letter mail = { NULL, NULL, NULL, NULL };
     int check = 0;
     FILE *src = fopen("../unit_tests/complexContentLetter.txt", "r");
     check = getLetterFromFile(src, &mail); 
@@ -85,7 +85,7 @@ TEST(getLetterFromFile, complexContentLetter)
 
 TEST(getLetterFromFile, russianLetter)
 {
-    letter mail = {};
+    letter mail = { NULL, NULL, NULL, NULL };
     int check = 0;
     FILE *src = fopen("../unit_tests/russianLetter.txt", "r");
     check = getLetterFromFile(src, &mail); 
@@ -100,7 +100,7 @@ TEST(getLetterFromFile, russianLetter)
 
 TEST(isSpam, notSpam)
 {
-    letter mail = {};
+    letter mail = { NULL, NULL, NULL, NULL };
     int check = 0;
     FILE *src = fopen("../unit_tests/complexContentLetter.txt", "r");
     check = getLetterFromFile(src, &mail); 
@@ -117,7 +117,7 @@ TEST(isSpam, notSpam)
 
 TEST(isSpam, spamInSender)
 {
-    letter mail = {};
+    letter mail = { NULL, NULL, NULL, NULL };
     int check = 0;
     FILE *src = fopen("../unit_tests/spamInSender.txt", "r");
     check = getLetterFromFile(src, &mail); 
@@ -134,7 +134,7 @@ TEST(isSpam, spamInSender)
 
 TEST(isSpam, spamInRecipient)
 {
-    letter mail = {};
+    letter mail = { NULL, NULL, NULL, NULL };
     int check = 0;
     FILE *src = fopen("../unit_tests/spamInRecipient.txt", "r");
     check = getLetterFromFile(src, &mail); 
@@ -151,7 +151,7 @@ TEST(isSpam, spamInRecipient)
 
 TEST(isSpam, spamInTopic)
 {
-    letter mail = {};
+    letter mail = { NULL, NULL, NULL, NULL };
     int check = 0;
     FILE *src = fopen("../unit_tests/spamInTopic.txt", "r");
     check = getLetterFromFile(src, &mail); 
@@ -168,7 +168,7 @@ TEST(isSpam, spamInTopic)
 
 TEST(isSpam, spamInContent)
 {
-    letter mail = {};
+    letter mail = { NULL, NULL, NULL, NULL };
     int check = 0;
     FILE *src = fopen("../unit_tests/spamInContent.txt", "r");
     check = getLetterFromFile(src, &mail); 

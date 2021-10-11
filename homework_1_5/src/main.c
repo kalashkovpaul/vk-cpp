@@ -6,7 +6,7 @@ int main(void)
 {
     printf("Домашнее задание 1\n");
     int check = OK;
-    letter mail = { 0 };
+    letter mail = { NULL, NULL, NULL, NULL};
     check = getLetterFromUser(&mail);
     if (check == OK)
     {
