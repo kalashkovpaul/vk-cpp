@@ -16,9 +16,6 @@ before_script:
   - sudo make
   - sudo cp *.a /usr/lib
   - cd "${TRAVIS_BUILD_DIR}"
-  - cmake .
-  - make
-  - ./tests
 
 addons:
   apt:
