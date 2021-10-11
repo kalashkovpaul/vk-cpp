@@ -20,6 +20,7 @@ addons:
 
 script:
     # скрипт сборки и тестирования проекта:
+    - sudo apt-get install libgtest-dev
     - cd homework_1_5
     - mkdir build
     - cd build
