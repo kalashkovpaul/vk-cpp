@@ -6,7 +6,9 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CXX g++)
 
-project(googletest-download NONE)
+
+
+# project(googletest-download NONE)
 
 # include(ExternalProject)
 # ExternalProject_Add(googletest
