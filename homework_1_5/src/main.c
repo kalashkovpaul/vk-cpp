@@ -6,10 +6,9 @@ int main(void)
 {
     printf("Домашнее задание 1\n");
     int check = OK;
-    letter mail = { NULL, NULL, NULL, NULL};
+    letter mail = { NULL, NULL, NULL, NULL };
     check = getLetterFromUser(&mail);
-    if (check == OK)
-    {
+    if (check == OK) {
         filePrintLetterInfo(stdout, mail);
         if (isSpam(mail))
             printf("Спам!\n");

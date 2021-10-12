@@ -2,25 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "letter.h"
 #include "constants.h"
+#include "letter.h"
 
-static int fileReadLine(FILE *src, char **str)
+static int fileReadLine(FILE* src, char** str)
 {
     int check = OK;
     int allocatedLength = 2;
     *str = malloc(allocatedLength * sizeof(char));
-    if (*str)
-    {
+    if (*str) {
         char ch = 0;
-        char *tmp = NULL;
+        char* tmp = NULL;
         int i = 0;
-        while (ch != '\n' && check != ERR_MEMORY && !feof(src))
-        {
+        while (ch != '\n' && check != ERR_MEMORY && !feof(src)) {
             fscanf(src, "%c", &ch);
             check = OK;
-            if (i == allocatedLength)
-            {
+            if (i == allocatedLength) {
                 allocatedLength *= 2;
                 tmp = realloc(*str, allocatedLength * sizeof(char));
                 if (tmp)
@@ -35,71 +32,62 @@ static int fileReadLine(FILE *src, char **str)
             check = ERR_WITHOUT_END;
         else if (check == OK)
             (*str)[i - 1] = 0;
-    }
-    else
+    } else
         check = ERR_MEMORY;
     return check;
 }
 
-static int concatenateLines(char **beginning, char *end)
+static int concatenateLines(char** beginning, char* end)
 {
     int check = OK;
     int beginningLength = strlen(*beginning);
     int endLength = strlen(end);
-    char *tmp = NULL;
+    char* tmp = NULL;
     tmp = realloc(*beginning, (beginningLength + endLength + 2) * sizeof(char)); // +  2: 1 на перенос строки в центре, 1 на терм. ноль
-    if (tmp)
-    {
+    if (tmp) {
         *beginning = tmp;
         (*beginning)[beginningLength] = '\n';
-        char *from = *beginning + beginningLength + 1;
+        char* from = *beginning + beginningLength + 1;
         memcpy(from, end, endLength + 1);
         (*beginning)[beginningLength + endLength + 1] = 0;
-    }
-    else
+    } else
         check = ERR_MEMORY;
     return check;
 }
 
-static int isItTimeToTerminate(char *str)
+static int isItTimeToTerminate(char* str)
 {
-    return (strncmp(str, CONTENT_TERMINATION_SEQUENSE, CONTENT_TERMINATION_SEQUENSE_LENGTH) == 0 \
-     && str[CONTENT_TERMINATION_SEQUENSE_LENGTH] == 0);
+    return (strncmp(str, CONTENT_TERMINATION_SEQUENSE, CONTENT_TERMINATION_SEQUENSE_LENGTH) == 0
+        && str[CONTENT_TERMINATION_SEQUENSE_LENGTH] == 0);
 }
 
-static int fileGetContent(FILE *src, char **content)
+static int fileGetContent(FILE* src, char** content)
 {
-    char *line_of_content = NULL;
+    char* line_of_content = NULL;
     int check = OK;
     check = fileReadLine(src, content);
-    if (check == OK && isItTimeToTerminate(*content))
-    {
+    if (check == OK && isItTimeToTerminate(*content)) {
         free(*content);
-        char *tmp = malloc(sizeof(char));
+        char* tmp = malloc(sizeof(char));
         *content = tmp;
         **content = '\0';
-    }
-    else if (check == OK && !isItTimeToTerminate(*content))
-    {
+    } else if (check == OK && !isItTimeToTerminate(*content)) {
         check = fileReadLine(src, &line_of_content);
-        while (check == OK && !isItTimeToTerminate(line_of_content))
-        {
+        while (check == OK && !isItTimeToTerminate(line_of_content)) {
             concatenateLines(content, line_of_content);
             check = fileReadLine(src, &line_of_content);
-        } 
+        }
     }
     return check;
 }
 
-int getLetterFromFile(FILE *src, letter *currentLetter)
+int getLetterFromFile(FILE* src, letter* currentLetter)
 {
     int check = OK;
     check = fileReadLine(src, &(currentLetter->sender));
-    if (check == OK)
-    {
+    if (check == OK) {
         check = fileReadLine(src, &(currentLetter->recipient));
-        if (check == OK)
-        {
+        if (check == OK) {
             check = fileReadLine(src, &(currentLetter->topic));
             if (check == OK)
                 check = fileGetContent(src, &(currentLetter->content));
@@ -108,21 +96,18 @@ int getLetterFromFile(FILE *src, letter *currentLetter)
     return check;
 }
 
-int getLetterFromUser(letter *currentLetter)
+int getLetterFromUser(letter* currentLetter)
 {
     int check = OK;
     printf("Отправитель: \n");
     check = fileReadLine(stdin, &(currentLetter->sender));
-    if (check == OK)
-    {
+    if (check == OK) {
         printf("Получатель: \n");
         check = fileReadLine(stdin, &(currentLetter->recipient));
-        if (check == OK)
-        {
+        if (check == OK) {
             printf("Тема письма: \n");
             check = fileReadLine(stdin, &(currentLetter->topic));
-            if (check == OK)
-            {
+            if (check == OK) {
                 printf("Содержание письма: \n");
                 check = fileGetContent(stdin, &(currentLetter->content));
             }
@@ -131,7 +116,7 @@ int getLetterFromUser(letter *currentLetter)
     return check;
 }
 
-void filePrintLetterInfo(FILE *dst, letter currentLetter)
+void filePrintLetterInfo(FILE* dst, letter currentLetter)
 {
     fprintf(dst, "Отправитель:\n");
     fprintf(dst, "%s\n", currentLetter.sender);
@@ -143,7 +128,7 @@ void filePrintLetterInfo(FILE *dst, letter currentLetter)
     fprintf(dst, "%s\n", currentLetter.content);
 }
 
-void freeLetter(letter *currentLetter)
+void freeLetter(letter* currentLetter)
 {
     free(currentLetter->sender);
     currentLetter->sender = NULL;
@@ -157,7 +142,5 @@ void freeLetter(letter *currentLetter)
 
 int isSpam(letter currentLetter)
 {
-    return (strstr(currentLetter.sender, SPAM_TRIGGER) != NULL || \
-    strstr(currentLetter.topic, SPAM_TRIGGER) != NULL || \
-    strstr(currentLetter.content, SPAM_TRIGGER) != NULL);
+    return (strstr(currentLetter.sender, SPAM_TRIGGER) != NULL || strstr(currentLetter.topic, SPAM_TRIGGER) != NULL || strstr(currentLetter.content, SPAM_TRIGGER) != NULL);
 }

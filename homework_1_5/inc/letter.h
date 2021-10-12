@@ -12,19 +12,19 @@
 
 typedef struct
 {
-    char *sender;
-    char *recipient;
-    char *topic;
-    char *content;
+    char* sender;
+    char* recipient;
+    char* topic;
+    char* content;
 } letter;
 
-int getLetterFromFile(FILE *src, letter *currentLetter);
+int getLetterFromFile(FILE* src, letter* currentLetter);
 
-int getLetterFromUser(letter *currentLetter);
+int getLetterFromUser(letter* currentLetter);
 
-void filePrintLetterInfo(FILE *dst, letter currentLetter);
+void filePrintLetterInfo(FILE* dst, letter currentLetter);
 
-void freeLetter(letter *currentLetter);
+void freeLetter(letter* currentLetter);
 
 int isSpam(letter currentLetter);
 
