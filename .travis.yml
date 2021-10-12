@@ -26,7 +26,6 @@ addons:
       - make
       - cmake
       - libgtest-dev
-      - clang-format
 
 script:
     # скрипт сборки и тестирования проекта:
