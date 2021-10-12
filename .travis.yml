@@ -31,13 +31,13 @@ script:
     # скрипт сборки и тестирования проекта:
     - sudo apt install cmake
     - sudo apt-get install libgtest-dev
-    - sudo apt install clang-format
     - cd homework_1_5
     - cd src
     - clang-format -i -style=WebKit *.c
     - cd ../inc
     - clang-format -i -style=WebKit *.h
     - cd ..
+    - cppcheck -q --enable=all ./src
     - mkdir build
     - cd build
     - cmake ..
