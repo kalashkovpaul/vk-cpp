@@ -20,7 +20,7 @@ static int fileReadLine(FILE* src, char** str)
             if (i == allocatedLength) {
                 allocatedLength *= 2;
                 tmp = realloc(*str, allocatedLength * sizeof(char));
-                if (tmp)
+                if (tmp)    
                     *str = tmp;
                 else
                     check = ERR_MEMORY;
@@ -63,7 +63,7 @@ static int isItTimeToTerminate(char* str)
 
 static int fileGetContent(FILE* src, char** content)
 {
-    char* line_of_content = NULL;
+    char* lineOfContent = NULL;
     int check = OK;
     check = fileReadLine(src, content);
     if (check == OK && isItTimeToTerminate(*content)) {
@@ -72,12 +72,13 @@ static int fileGetContent(FILE* src, char** content)
         *content = tmp;
         **content = '\0';
     } else if (check == OK && !isItTimeToTerminate(*content)) {
-        check = fileReadLine(src, &line_of_content);
-        while (check == OK && !isItTimeToTerminate(line_of_content)) {
-            concatenateLines(content, line_of_content);
-            check = fileReadLine(src, &line_of_content);
+        check = fileReadLine(src, &lineOfContent);
+        while (check == OK && !isItTimeToTerminate(lineOfContent)) {
+            concatenateLines(content, lineOfContent);
+            check = fileReadLine(src, &lineOfContent);
         }
     }
+    free(lineOfContent);
     return check;
 }
 
