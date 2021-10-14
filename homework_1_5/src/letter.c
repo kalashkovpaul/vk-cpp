@@ -21,10 +21,7 @@ static int fileReadLine(FILE* src, char** str)
                 allocatedLength *= 2;
                 tmp = realloc(*str, allocatedLength * sizeof(char));
                 if (tmp)
-                {
                     *str = tmp;
-                    //memset(*str + i, 0, sizeof(char) * i);
-                }
                 else
                     check = ERR_MEMORY;
             }
