@@ -27,10 +27,13 @@ addons:
       - cmake
       - libgtest-dev
 
-script:
+install:
+  - source homework_1_5/install.sh
+
+#script:
     # скрипт сборки и тестирования проекта:
-      - cd homework_1_5
-      - ./install.sh
+      # - cd homework_1_5
+      # - ./install.sh
     # - sudo apt install cmake
     # - sudo apt-get install libgtest-dev
     # - sudo apt install gcovr
