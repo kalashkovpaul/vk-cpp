@@ -16,16 +16,16 @@ typedef struct
     char* recipient;
     char* topic;
     char* content;
-} letter;
+} letter_t;
 
-int getLetterFromFile(FILE* src, letter* currentLetter);
+int get_letter_from_file(FILE* src, letter_t* currentLetter);
 
-int getLetterFromUser(letter* currentLetter);
+int get_letter_from_user(letter_t* currentLetter);
 
-void filePrintLetterInfo(FILE* dst, letter currentLetter);
+void file_print_letter_info(FILE* dst, letter_t currentLetter);
 
-void freeLetter(letter* currentLetter);
+void free_letter(letter_t* currentLetter);
 
-int isSpam(letter currentLetter);
+int is_spam(letter_t currentLetter);
 
 #endif

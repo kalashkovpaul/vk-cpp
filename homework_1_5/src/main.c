@@ -6,15 +6,15 @@ int main(void)
 {
     printf("Домашнее задание 1\n");
     int check = OK;
-    letter mail = { NULL, NULL, NULL, NULL };
-    check = getLetterFromUser(&mail);
+    letter_t mail = { NULL, NULL, NULL, NULL };
+    check = get_letter_from_user(&mail);
     if (check == OK) {
-        filePrintLetterInfo(stdout, mail);
-        if (isSpam(mail))
+        file_print_letter_info(stdout, mail);
+        if (is_spam(mail))
             printf("Спам!\n");
         else
             printf("Ладно, не спам...\n");
-        freeLetter(&mail);
+        free_letter(&mail);
     }
     return check;
 }

@@ -5,11 +5,11 @@
 #include "constants.h"
 #include "letter.h"
 
-static int fileReadLine(FILE* src, char** str)
+static int file_read_line(FILE* src, char** str)
 {
     int check = OK;
-    int allocatedLength = 2;
-    *str = malloc(allocatedLength * sizeof(char));
+    int allocated_length = 2;
+    *str = malloc(allocated_length * sizeof(char));
     if (*str) {
         char ch = 0;
         char* tmp = NULL;
@@ -17,9 +17,9 @@ static int fileReadLine(FILE* src, char** str)
         while (ch != '\n' && check != ERR_MEMORY && !feof(src)) {
             fscanf(src, "%c", &ch);
             check = OK;
-            if (i == allocatedLength) {
-                allocatedLength *= 2;
-                tmp = realloc(*str, allocatedLength * sizeof(char));
+            if (i == allocated_length) {
+                allocated_length *= 2;
+                tmp = realloc(*str, allocated_length * sizeof(char));
                 if (tmp)
                     *str = tmp;
                 else
@@ -37,112 +37,112 @@ static int fileReadLine(FILE* src, char** str)
     return check;
 }
 
-static int concatenateLines(char** beginning, char* end)
+static int concatenate_lines(char** beginning, char* end)
 {
     int check = OK;
-    int beginningLength = strlen(*beginning);
-    int endLength = strlen(end);
+    int beginning_length = strlen(*beginning);
+    int end_length = strlen(end);
     char* tmp = NULL;
-    tmp = realloc(*beginning, (beginningLength + endLength + 2) * sizeof(char)); // +  2: 1 на перенос строки в центре, 1 на терм. ноль
+    tmp = realloc(*beginning, (beginning_length + end_length + 2) * sizeof(char)); // +  2: 1 на перенос строки в центре, 1 на терм. ноль
     if (tmp) {
         *beginning = tmp;
-        (*beginning)[beginningLength] = '\n';
-        char* from = *beginning + beginningLength + 1;
-        memcpy(from, end, endLength + 1);
-        (*beginning)[beginningLength + endLength + 1] = 0;
+        (*beginning)[beginning_length] = '\n';
+        char* from = *beginning + beginning_length + 1;
+        memcpy(from, end, end_length + 1);
+        (*beginning)[beginning_length + end_length + 1] = 0;
     } else
         check = ERR_MEMORY;
     return check;
 }
 
-static int isItTimeToTerminate(char* str)
+static int is_it_time_to_terminate(char* str)
 {
     return (strncmp(str, CONTENT_TERMINATION_SEQUENSE, CONTENT_TERMINATION_SEQUENSE_LENGTH) == 0
         && str[CONTENT_TERMINATION_SEQUENSE_LENGTH] == 0);
 }
 
-static int fileGetContent(FILE* src, char** content)
+static int file_get_content(FILE* src, char** content)
 {
-    char* lineOfContent = NULL;
+    char* line_of_content = NULL;
     int check = OK;
-    check = fileReadLine(src, content);
-    if (check == OK && isItTimeToTerminate(*content)) {
+    check = file_read_line(src, content);
+    if (check == OK && is_it_time_to_terminate(*content)) {
         free(*content);
         char* tmp = malloc(sizeof(char));
         *content = tmp;
         **content = '\0';
-    } else if (check == OK && !isItTimeToTerminate(*content)) {
-        check = fileReadLine(src, &lineOfContent);
-        while (check == OK && !isItTimeToTerminate(lineOfContent)) {
-            concatenateLines(content, lineOfContent);
-            free(lineOfContent);
-            check = fileReadLine(src, &lineOfContent);
+    } else if (check == OK && !is_it_time_to_terminate(*content)) {
+        check = file_read_line(src, &line_of_content);
+        while (check == OK && !is_it_time_to_terminate(line_of_content)) {
+            concatenate_lines(content, line_of_content);
+            free(line_of_content);
+            check = file_read_line(src, &line_of_content);
         }
     }
-    free(lineOfContent);
+    free(line_of_content);
     return check;
 }
 
-int getLetterFromFile(FILE* src, letter* currentLetter)
+int get_letter_from_file(FILE* src, letter_t* current_letter)
 {
     int check = OK;
-    check = fileReadLine(src, &(currentLetter->sender));
+    check = file_read_line(src, &(current_letter->sender));
     if (check == OK) {
-        check = fileReadLine(src, &(currentLetter->recipient));
+        check = file_read_line(src, &(current_letter->recipient));
         if (check == OK) {
-            check = fileReadLine(src, &(currentLetter->topic));
+            check = file_read_line(src, &(current_letter->topic));
             if (check == OK)
-                check = fileGetContent(src, &(currentLetter->content));
+                check = file_get_content(src, &(current_letter->content));
         }
     }
     return check;
 }
 
-int getLetterFromUser(letter* currentLetter)
+int get_letter_from_user(letter_t* current_letter)
 {
     int check = OK;
     printf("Отправитель: \n");
-    check = fileReadLine(stdin, &(currentLetter->sender));
+    check = file_read_line(stdin, &(current_letter->sender));
     if (check == OK) {
         printf("Получатель: \n");
-        check = fileReadLine(stdin, &(currentLetter->recipient));
+        check = file_read_line(stdin, &(current_letter->recipient));
         if (check == OK) {
             printf("Тема письма: \n");
-            check = fileReadLine(stdin, &(currentLetter->topic));
+            check = file_read_line(stdin, &(current_letter->topic));
             if (check == OK) {
                 printf("Содержание письма: \n");
-                check = fileGetContent(stdin, &(currentLetter->content));
+                check = file_get_content(stdin, &(current_letter->content));
             }
         }
     }
     return check;
 }
 
-void filePrintLetterInfo(FILE* dst, letter currentLetter)
+void file_print_letter_info(FILE* dst, letter_t current_letter)
 {
     fprintf(dst, "Отправитель:\n");
-    fprintf(dst, "%s\n", currentLetter.sender);
+    fprintf(dst, "%s\n", current_letter.sender);
     fprintf(dst, "Получатель:\n");
-    fprintf(dst, "%s\n", currentLetter.recipient);
+    fprintf(dst, "%s\n", current_letter.recipient);
     fprintf(dst, "Тема письма:\n");
-    fprintf(dst, "%s\n", currentLetter.topic);
+    fprintf(dst, "%s\n", current_letter.topic);
     fprintf(dst, "Содержание письма:\n");
-    fprintf(dst, "%s\n", currentLetter.content);
+    fprintf(dst, "%s\n", current_letter.content);
 }
 
-void freeLetter(letter* currentLetter)
+void free_letter(letter_t* current_letter)
 {
-    free(currentLetter->sender);
-    currentLetter->sender = NULL;
-    free(currentLetter->recipient);
-    currentLetter->recipient = NULL;
-    free(currentLetter->topic);
-    currentLetter->topic = NULL;
-    free(currentLetter->content);
-    currentLetter->content = NULL;
+    free(current_letter->sender);
+    current_letter->sender = NULL;
+    free(current_letter->recipient);
+    current_letter->recipient = NULL;
+    free(current_letter->topic);
+    current_letter->topic = NULL;
+    free(current_letter->content);
+    current_letter->content = NULL;
 }
 
-int isSpam(letter currentLetter)
+int is_spam(letter_t current_letter)
 {
-    return (strstr(currentLetter.sender, SPAM_TRIGGER) != NULL || strstr(currentLetter.topic, SPAM_TRIGGER) != NULL || strstr(currentLetter.content, SPAM_TRIGGER) != NULL);
+    return (strstr(current_letter.sender, SPAM_TRIGGER) != NULL || strstr(current_letter.topic, SPAM_TRIGGER) != NULL || strstr(current_letter.content, SPAM_TRIGGER) != NULL);
 }
