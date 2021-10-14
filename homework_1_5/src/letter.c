@@ -20,8 +20,11 @@ static int fileReadLine(FILE* src, char** str)
             if (i == allocatedLength) {
                 allocatedLength *= 2;
                 tmp = realloc(*str, allocatedLength * sizeof(char));
-                if (tmp)    
+                if (tmp)
+                {
                     *str = tmp;
+                    //memset(*str + i, 0, sizeof(char) * i);
+                }
                 else
                     check = ERR_MEMORY;
             }
@@ -75,6 +78,7 @@ static int fileGetContent(FILE* src, char** content)
         check = fileReadLine(src, &lineOfContent);
         while (check == OK && !isItTimeToTerminate(lineOfContent)) {
             concatenateLines(content, lineOfContent);
+            free(lineOfContent);
             check = fileReadLine(src, &lineOfContent);
         }
     }

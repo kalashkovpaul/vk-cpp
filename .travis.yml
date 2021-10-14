@@ -31,7 +31,6 @@ script:
     # скрипт сборки и тестирования проекта:
     - sudo apt install cmake
     - sudo apt-get install libgtest-dev
-    - sudo apt install clang-tools # для scan-build
     - cd homework_1_5
     - cd src
     - clang-format -i -style=WebKit *.c
@@ -48,4 +47,5 @@ script:
     - cd build
     - cmake ..
     - scan-build make
-    - valgrind -q --tool=memcheck --leak-check=yes ./letterTest
+    - valgrind --tool=memcheck --leak-check=full ./letterTest
+    - gcovr -r ../ --html coverage --html-details
