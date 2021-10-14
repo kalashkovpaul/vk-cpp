@@ -49,4 +49,4 @@ script:
     - cmake ..
     - scan-build make
     - valgrind --tool=memcheck --leak-check=full ./letterTest
-    - gcovr -r .. --html coverage.html --html-details
+    - gcovr -r .. --html -o coverage.html --html-details
