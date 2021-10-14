@@ -1,7 +1,6 @@
 sudo apt install cmake
 sudo apt-get install libgtest-dev
 sudo apt install gcovr
-cd homework_1_5
 cd src
 clang-format -i -style=WebKit *.c
 clang -g -I../inc -fsanitize=thread *.c

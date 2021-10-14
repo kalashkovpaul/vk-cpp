@@ -29,6 +29,7 @@ addons:
 
 script:
     # скрипт сборки и тестирования проекта:
+      - cd homework_1_5
       - ./install.sh
     # - sudo apt install cmake
     # - sudo apt-get install libgtest-dev
