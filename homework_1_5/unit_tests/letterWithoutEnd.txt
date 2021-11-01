@@ -1,0 +1,6 @@
+Sender
+Recipient
+Topic
+Paragraph1
+Paragraph2
+And there is no "END"
