@@ -1,0 +1,5 @@
+add_executable(dynamic_differences_test src/main_test.cpp src/dynamic_differences_test.cpp)
+
+target_link_libraries(dynamic_differences_test dynamic_differences GTest::Main gcov)
+
+add_test(NAME dynamic_differences_test COMMAND dynamic_differences_test)
