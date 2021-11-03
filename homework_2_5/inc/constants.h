@@ -7,6 +7,7 @@
 #define OK 0
 #define ERR_ARG -1
 #define ERR_MMAP -2
-#define ERR_FILE -3
+#define ERR_FORK -3
+#define ERR_FILE -4
 
 #endif

@@ -1,18 +1,20 @@
 #include "gtest/gtest.h"
 
 extern "C" {
+#include <sys/mman.h>
 #include "dynamic_differences.h"
 }
 
 #include <stdio.h>
 
-TEST(static_differences, single_value_test)
+TEST(dynamic_differences, single_value_test)
 {
     //const char filename[] = "single_value_test";
     // TODO: после 11.06.2021 изменить
-    FILE *file = fopen("../../../../lib/my_static_lib/unit_tests/src/single_value_test", "rb");
+    FILE *file = fopen("../../../../lib/my_dynamic_lib/unit_tests/src/single_value_test", "rb");
     ASSERT_FALSE(file == NULL);
-    int differences[11] = { 0 };
+    int* differences = (int *) mmap(NULL, sizeof(int) * 11, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    ASSERT_FALSE(differences == MAP_FAILED);
     int check = 0;
     check = find_amounts_of_differences(file, differences);
     EXPECT_EQ(check, 0);
@@ -30,13 +32,14 @@ TEST(static_differences, single_value_test)
     fclose(file);
 }
 
-TEST(static_differences, two_values_test)
+TEST(dynamic_differences, two_values_test)
 {
     //const char filename[] = "two_values_test";
     // TODO: после 11.06.2021 изменить
     FILE *file = fopen("../../../../lib/my_dynamic_lib/unit_tests/src/two_values_test", "rb");
     ASSERT_FALSE(file == NULL);
-    int differences[11] = { 0 };
+    int* differences = (int *) mmap(NULL, sizeof(int) * 11, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    ASSERT_FALSE(differences == MAP_FAILED);
     int check;
     check = find_amounts_of_differences(file, differences);
     EXPECT_EQ(check, 0);
@@ -54,7 +57,7 @@ TEST(static_differences, two_values_test)
     fclose(file);
 }
 
-TEST(static_differences, wrong_file_test)
+TEST(dynamic_differences, wrong_file_test)
 {
     int differences[11] = { 0 };
     int check;
@@ -63,7 +66,7 @@ TEST(static_differences, wrong_file_test)
     EXPECT_EQ(check, -1);
 }
 
-TEST(static_differences, wrong_value_test)
+TEST(dynamic_differences, wrong_value_test)
 {
     //const char filename[] = "single_value_test";
     // TODO: после 11.06.2021 изменить
@@ -75,13 +78,14 @@ TEST(static_differences, wrong_value_test)
     EXPECT_EQ(check, -1);
 }
 
-TEST(static_differences, multiple_values_test)
+TEST(dynamic_differences, multiple_values_test)
 {
     //const char filename[] = "two_values_test";
     // TODO: после 11.06.2021 изменить
     FILE *file = fopen("../../../../lib/my_dynamic_lib/unit_tests/src/multiple_values_test", "rb");
     ASSERT_FALSE(file == NULL);
-    int differences[11] = { 0 };
+    int* differences = (int *) mmap(NULL, sizeof(int) * 11, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    ASSERT_FALSE(differences == MAP_FAILED);
     int check;
     check = find_amounts_of_differences(file, differences);
     EXPECT_EQ(check, 0);
