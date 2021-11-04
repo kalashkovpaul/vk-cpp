@@ -44,6 +44,5 @@ script:
     - cd build
     - cmake ..
     - scan-build make
-    - valgrind --tool=memcheck --leak-check=full ./app
-    - ctest
+    - valgrind --tool=memcheck --leak-check=full ctest
     - gcovr -r ../
