@@ -35,18 +35,14 @@ script:
     - cd homework_2_5
     - cd src
     - clang-format -i -style=WebKit *.c
-    - clang -g -I../inc -fsanitize=thread *.c
-    - clang -g -I../inc -fsanitize=undefined *.c
-    - clang -g -I../inc -fsanitize=memory *.c
-    - clang -g -I../inc -fsanitize=address *.c
-    - rm a.out
     - cd ../inc
     - clang-format -i -style=WebKit *.h
     - cd ..
-    - cppcheck -q --enable=all ./src
+    - cppcheck -q --enable=all --suppress=missingIncludeSystem -I inc/ -I lib/my_static_lib/inc/ -I lib/my_dynamic_lib/inc/ --check-config ./src/ 
     - mkdir build
     - cd build
     - cmake ..
     - scan-build make
-    - valgrind --tool=memcheck --leak-check=full app
+    - valgrind --tool=memcheck --leak-check=full ./app
+    - ctests
     - gcovr -r ../

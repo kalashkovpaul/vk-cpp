@@ -12,6 +12,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic -Wvla -Iinc -Wfl
 add_compile_options("--coverage")
 add_link_options("--coverage")
 
+add_compile_options("-fsanitize=undefined")
+add_link_options("-fsanitize=undefined")
+add_compile_options("-fsanitize=leak")
+add_link_options("-fsanitize=leak")
+add_compile_options("-fsanitize=address")
+add_link_options("-fsanitize=address")
+
 add_library(create_file STATIC ${LIB_SOURCE_FILES} ${LIB_HEADERS_FILES})
 
 include_directories(${PROJECT_SOURCE_DIR}/inc)
@@ -25,4 +32,4 @@ add_subdirectory(lib/my_dynamic_lib)
 
 add_executable(app src/main.c)
 
-target_link_libraries(app create_file dynamic_differences gcov)
+target_link_libraries(app create_file static_differences dynamic_differences gcov)
