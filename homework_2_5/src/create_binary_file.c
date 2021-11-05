@@ -11,27 +11,27 @@ void create_file(const char* filename)
         fwrite(&byte, sizeof(char), 1, file);
         byte += 1;
     }
-    for (i = 0; i < bytes_amount - 1; i++) {
+    for (i = 0; i < bytes_amount; i++) {
         fwrite(&byte, sizeof(char), 1, file);
         byte += 2;
     }
-    for (i = 0; i < bytes_amount - 2; i++) {
+    for (i = 0; i < bytes_amount; i++) {
         fwrite(&byte, sizeof(char), 1, file);
         byte += 4;
     }
-    for (i = 0; i < bytes_amount - 3; i++) {
+    for (i = 0; i < bytes_amount; i++) {
         fwrite(&byte, sizeof(char), 1, file);
         byte += 5;
     }
-    for (i = 0; i < bytes_amount - 4; i++) {
+    for (i = 0; i < bytes_amount; i++) {
         fwrite(&byte, sizeof(char), 1, file);
         byte += 6;
     }
-    for (i = 0; i < bytes_amount - 5; i++) {
+    for (i = 0; i < bytes_amount; i++) {
         fwrite(&byte, sizeof(char), 1, file);
         byte += 7;
     }
-    for (i = 0; i < bytes_amount - 6; i++) {
+    for (i = 0; i < bytes_amount; i++) {
         fwrite(&byte, sizeof(char), 1, file);
         byte += 10;
     }
