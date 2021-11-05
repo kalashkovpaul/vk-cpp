@@ -45,4 +45,5 @@ script:
     - cmake ..
     - scan-build make
     - valgrind --tool=memcheck --leak-check=full ctest
+    - cat Testing/Temporary/LastTest.log
     - gcovr -r ../
