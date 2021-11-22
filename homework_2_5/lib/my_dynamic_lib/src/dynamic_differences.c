@@ -3,7 +3,9 @@
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "constants.h"
 
@@ -11,25 +13,27 @@
 #define unlikely(expr) __builtin_expect(!!(expr), 0)
 #define likely(expr) __builtin_expect(!!(expr), 1)
 
-size_t find_size_of_file(FILE *file);
+static size_t find_size_of_file(FILE *file);
 
-int find_amount_of_fixed_difference(const char *data, int file_size, int *value, int difference);
+static int find_amount_of_fixed_difference(const char *data, int file_size, int difference);
 
-void copy_data_from_file(FILE *src, int file_size, char *dst);
+static void copy_data_from_file(FILE *src, int file_size, char *dst);
 
-void print_differences(int *differences);
+static void print_differences(int *differences);
 
 int find_amounts_of_differences(FILE *file, int *differences)
 {
     if (file == NULL || differences == NULL)
         return ERR_ARG;
-    size_t file_size = find_size_of_file(file);
+    struct stat file_info;
     int int_file = fileno(file);
+    if (fstat(int_file, &file_info) == -1)
+        return ERR_ARG;
 
-    char *data = mmap(0, file_size, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, int_file, 0);
+    char *data = mmap(0, file_info.st_size, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, int_file, 0);
     if (unlikely(data == MAP_FAILED))
         return ERR_MMAP;
-    copy_data_from_file(file, file_size, data);
+    copy_data_from_file(file, file_info.st_size, data);
 
     char *fixed_difference = mmap(0, sizeof(char), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if (fixed_difference == MAP_FAILED)
@@ -63,7 +67,7 @@ int find_amounts_of_differences(FILE *file, int *differences)
             {
                 int wstatus;
                 waitpid(pids[i], &wstatus, 0);
-                if (unlikely(WIFEXITED(wstatus) == 0))
+                if (WIFEXITED(wstatus) == 0)
                     return ERR_FORK;
             }
         }
@@ -72,7 +76,7 @@ int find_amounts_of_differences(FILE *file, int *differences)
             pids[*pid_number] = pid;
             if (*fixed_difference <= MAX_OF_DIFFERENCES)
             {
-                find_amount_of_fixed_difference(data, file_size, differences + *fixed_difference, *fixed_difference);
+                differences[*fixed_difference] = find_amount_of_fixed_difference(data, file_info.st_size, *fixed_difference);
             }
             *fixed_difference += 1;
             *pid_number += 1;
@@ -87,7 +91,7 @@ int find_amounts_of_differences(FILE *file, int *differences)
             {
                 if (*fixed_difference <= MAX_OF_DIFFERENCES)
                 {
-                    find_amount_of_fixed_difference(data, file_size, differences + *fixed_difference, *fixed_difference);
+                    differences[*fixed_difference] = find_amount_of_fixed_difference(data, file_info.st_size, *fixed_difference);
                 }
                 *fixed_difference += 1;
                 exit(0);
@@ -98,49 +102,33 @@ int find_amounts_of_differences(FILE *file, int *differences)
     return OK;
 }
 
-void copy_data_from_file(FILE *src, int file_size, char *dst)
+static void copy_data_from_file(FILE *src, int file_size, char *dst)
 {
     if (src == NULL || dst == NULL || file_size <= 0)
         return;
     fseek(src, 0, SEEK_SET);
-    char byte = 0;
-    for (int i = 0; i < file_size; i++)
-    {
-        fread(&byte, sizeof(char), 1, src);
-        dst[i] = byte;
-    }
+    fread(dst, sizeof(char) * file_size, 1, src);
 }
 
-int find_amount_of_fixed_difference(const char *data, int file_size, int *value, int difference)
+static int find_amount_of_fixed_difference(const char *data, int file_size, int difference)
 {
-    if (data == NULL || value == NULL)
+    if (data == NULL)
+    {
+        errno = ERR_ARG;
         return ERR_ARG;
+    }
     int index = 0;
     char current_byte = 0, previous_byte = 0;
+    int value = 0;
     previous_byte = data[index++];
     while (index < file_size)
     {
         current_byte = data[index++];
         if (current_byte - previous_byte == difference || current_byte - previous_byte == -difference)
-            *value += 1;
+            value += 1;
         previous_byte = current_byte;
     }
-    return OK;
-}
-
-size_t find_size_of_file(FILE *file)
-{
-    fseek(file, 0, SEEK_SET);
-    size_t size = 0;
-    char byte = 0;
-    int check = 1;
-    while (check)
-    {
-        check = fread(&byte, sizeof(char), 1, file);
-        if (check)
-            size++;
-    }
-    return size;
+    return value;
 }
 
 void print_differences(int *differences)

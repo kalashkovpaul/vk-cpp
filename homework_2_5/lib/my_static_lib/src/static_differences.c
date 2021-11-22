@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "constants.h"
 
-int find_amount_of_fixed_difference(FILE *file, int *value, int difference);
+static int find_amount_of_fixed_difference(FILE *file, int *value, int difference);
 
 int find_amounts_of_differences(FILE *file, int *differences)
 {
@@ -11,7 +11,7 @@ int find_amounts_of_differences(FILE *file, int *differences)
     return check;
 }
 
-int find_amount_of_fixed_difference(FILE *file, int *value, int difference)
+static int find_amount_of_fixed_difference(FILE *file, int *value, int difference)
 {
     if (file == NULL || value == NULL)
         return ERR_ARG;
