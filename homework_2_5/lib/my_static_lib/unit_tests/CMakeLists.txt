@@ -1,0 +1,5 @@
+add_executable(static_differences_test src/main_test.cpp src/static_differences_test.cpp)
+
+target_link_libraries(static_differences_test static_differences GTest::Main gcov)
+
+add_test(NAME static_differences_test COMMAND static_differences_test)
